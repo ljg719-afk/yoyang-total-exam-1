@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>1차 종합 모의고사</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.6;-webkit-text-size-adjust:100%}
+.container{max-width:640px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:30px 0 20px}
+.header h1{font-size:20px;font-weight:800;color:#f8fafc;margin-bottom:4px}
+.header p{font-size:13px;color:#94a3b8}
+.card{background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid #334155}
+.card h2{font-size:16px;color:#60a5fa;margin-bottom:12px}
+.input-wrap label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px}
+.input-wrap input{width:100%;padding:12px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f8fafc;font-size:15px;outline:none}
+.input-wrap input:focus{border-color:#3b82f6}
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s}
+.btn-primary{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;margin-top:16px}
+.btn-secondary{background:#334155;color:#94a3b8;margin-top:10px;font-size:13px;padding:10px}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+.section-title{background:linear-gradient(135deg,#1e3a5f,#1e293b);padding:12px 16px;margin:20px 0 12px;border-radius:12px;font-size:14px;font-weight:700;color:#60a5fa;border-left:4px solid #3b82f6}
+.q-card{background:#1e293b;border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid #334155}
+.q-num{display:inline-block;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+.q-text{font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:12px;line-height:1.7}
+.opt-list{display:flex;flex-direction:column;gap:6px}
+.opt-btn{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#0f172a;border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid transparent}
+.opt-btn:active{transform:scale(0.98)}
+.opt-btn.selected{background:#1e3a5f;border-color:#3b82f6}
+.opt-circle{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid #475569;display:flex;align-items:center;justify-content:center;font-size:11px;color:#94a3b8;margin-top:1px}
+.opt-btn.selected .opt-circle{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.opt-btn span:last-child{font-size:13px;color:#cbd5e1;line-height:1.5}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#3b82f6,#60a5fa);z-index:100;transition:width .3s}
+.progress-info{text-align:center;font-size:12px;color:#64748b;margin:10px 0}
+.submit-area{padding:20px 0 40px;text-align:center}
+.lock-screen{text-align:center;padding:40px 20px}
+.lock-screen .icon{font-size:48px;margin-bottom:16px}
+.lock-input{width:200px;padding:14px;background:#0f172a;border:2px solid #334155;border-radius:12px;color:#f8fafc;font-size:18px;text-align:center;letter-spacing:4px;outline:none;margin:0 auto;display:block}
+.lock-input:focus{border-color:#3b82f6}
+.lock-msg{font-size:13px;margin-top:10px;min-height:20px}
+.result-header{text-align:center;padding:20px 0}
+.score-circle{width:120px;height:120px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 16px;border:4px solid}
+.score-circle.pass{border-color:#22c55e;color:#22c55e}
+.score-circle.fail{border-color:#ef4444;color:#ef4444}
+.score-circle .num{font-size:36px;font-weight:800;line-height:1}
+.score-circle .unit{font-size:12px;margin-top:2px}
+.score-detail{font-size:13px;color:#94a3b8;margin-top:8px}
+.r-card{background:#1e293b;border-radius:14px;padding:14px;margin-bottom:10px;border-left:4px solid}
+.r-card.correct{border-color:#22c55e}
+.r-card.wrong{border-color:#ef4444}
+.r-q{font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:8px;line-height:1.6}
+.r-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.r-badge.correct{background:#166534;color:#86efac}
+.r-badge.wrong{background:#7f1d1d;color:#fca5a5}
+.r-ans{font-size:12px;color:#94a3b8;margin-bottom:4px}
+.r-expl{font-size:12px;color:#64748b;line-height:1.6;padding:8px;background:#0f172a;border-radius:8px;margin-top:6px}
+.admin-panel{max-width:640px;margin:0 auto;padding:16px}
+.adm-section{background:#1e293b;border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid #334155}
+.adm-section h3{font-size:15px;color:#60a5fa;margin-bottom:12px}
+.guide-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #334155}
+.guide-step:last-child{border:none}
+.guide-num{flex-shrink:0;width:28px;height:28px;background:#3b82f6;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.guide-text{font-size:13px;line-height:1.7;color:#cbd5e1}
+.guide-text b{color:#60a5fa}
+.kakao-msg{background:#0f172a;border-radius:10px;padding:14px;margin:10px 0;font-size:13px;line-height:1.8;color:#fbbf24;border:1px dashed #92400e;word-break:keep-all}
+.copy-btn{display:inline-block;padding:6px 14px;background:#334155;color:#e2e8f0;border:none;border-radius:8px;font-size:12px;cursor:pointer;margin-top:6px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<script>
+const ADMIN_PW="admin2025";
+const UNLOCK_CODE="2025";
+const PASS_SCORE=36;
+const TOTAL=60;
+const ANS=[4, 5, 3, 5, 4, 3, 5, 1, 3, 5, 3, 5, 3, 4, 3, 5, 4, 5, 3, 4, 4, 3, 3, 2, 3, 1, 2, 3, 4, 4, 4, 3, 1, 2, 2, 2, 2, 4, 2, 4, 3, 3, 2, 2, 1, 1, 4, 3, 5, 3, 4, 4, 4, 5, 3, 4, 5, 5, 5, 1];
+const SECS=[
+  {t:"제5장 노화에 따른 변화와 질환(1~20번)", s:1, e:20},
+  {t:"제6장 치매·뇌졸중·파킨슨 질환(21~44번)", s:21, e:44},
+  {t:"제7장 건강증진 및 질병예방(45~60번)", s:45, e:60}
+];
+const Q=[
+  {
+    q:"노인의 수술 후 합병증 예방을 위해 요양보호사가 수행해야 할 관리로 옳지 않은 것은?",
+    o:["조기 이상(가능한 빨리 침대에서 일어나 움직이기)을 격려한다",
+       "심호흡과 기침을 격려하여 폐 합병증을 예방한다",
+       "체위를 변경하여 욕창을 예방한다",
+       "통증이 있어도 침상 안정만 취하게 한다",
+       "충분한 수분 섭취를 격려한다"],
+    e:"충분한 수분 섭취를 격려한다"
+  },
+  {
+    q:"결핵 대상자와 접촉한 후 요양보호사의 대처로 옳은 것은?",
+    o:["백일해 예방접종을 한다",
+       "멸균소독 가운을 착용한다",
+       "예방적 항생제를 복용한다",
+       "기침을 할 때는 손으로 가리고 한다",
+       "감염 여부를 확인하기 위해 검사를 한다"],
+    e:"결핵 대상자와 접촉한 경우 감염 여부를 확인하기 위해 투베르쿨린 검사(TST) 등 결핵 검사를 받아야 함."
+  },
+  {
+    q:"퇴행성 관절염과 류마티스 관절염을 비교한 설명으로 옳은 것은?",
+    o:["퇴행성 관절염은 자가면역 질환이다",
+       "류마티스 관절염은 주로 체중 부하 관절에 발생한다",
+       "퇴행성 관절염의 관절 뻣뻣함은 주로 아침에 30분 이내로 나타나고, 류마티스 관절염은 1시간 이상 지속된다",
+       "두 질환 모두 관절 외 전신 증상이 나타난다",
+       "퇴행성 관절염은 좌우 대칭적으로 나타난다"],
+    e:"두 질환 모두 관절 외 전신 증상이 나타난다"
+  },
+  {
+    q:"골다공증으로 고관절 골절의 위험이 높은 대상자에게 행동 수정이 필요한 경우는?",
+    o:["연어, 고등어, 달걀을 자주 섭취한다",
+       "규칙적으로 하지근력 강화운동을 한다",
+       "거실에 널려 있는 물건이 없도록 청소한다",
+       "안경도수가 맞지 않아 안경을 새로 맞추었다",
+       "저체중 상태를 유지하기 위해 다이어트를 한다"],
+    e:"저체중은 골밀도를 낮추어 골절 위험을 높이므로 다이어트보다 적정 체중 유지가 필요함."
+  },
+  {
+    q:"노화에 따른 신경계 변화로 옳은 것은?",
+    o:["뇌 무게가 증가한다",
+       "신경전달 속도가 빨라진다",
+       "뇌 혈류량이 증가한다",
+       "반응 시간이 길어지고 균형 감각이 저하된다",
+       "신경세포의 수가 증가한다"],
+    e:"신경세포의 수가 증가한다"
+  },
+  {
+    q:"전립선비대증을 관리하는 방법으로 옳은 것은?",
+    o:["성생활을 금한다",
+       "소변량을 증가시키기 위해 맥주를 마신다",
+       "고지방과 고콜레스테롤 음식 섭취를 피한다",
+       "소변을 참을 수 있을 때까지 참는다",
+       "약화된 근육을 강화하기 위해 체중을 늘린다"],
+    e:"소변을 참을 수 있을 때까지 참는다."
+  },
+  {
+    q:"노인에서 요로감염이 잘 발생하는 이유로 옳은 것을 모두 고른 것은?   ㄱ. 방광의 잔뇨량 증가   ㄴ. 면역기능 저하   ㄷ. 요도 점막의 방어 기능 약화   ㄹ. 전립선 비대(남성)로 인한 요 정체?",
+    o:["ㄱ, ㄴ",
+       "ㄱ, ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄹ",
+       "ㄱ, ㄷ, ㄹ",
+       "ㄱ, ㄴ, ㄷ, ㄹ"],
+    e:"노인에서 요로감염이 잘 발생하는 이유는 모두 해당됨. ㄱ. 방광 수축력 저하로 잔뇨량이 증가하여 세균 번식 환경이 조성됨. ㄴ. 전반적인 면역기능 저하로 감염에 취약해짐. ㄷ. 요도 점막의 IgA 분비 감소 등 국소 방어 기능이 약화됨. ㄹ. 남성의 경우 전립선 비대로 요도가 좁아져 소변 흐름이 방해되고 잔뇨량이 증가함. 여성은 폐경 후 에스트로겐 감소로 질·요도 점막이 위축되어 세균 침입이 쉬워짐. 노인 요로감염은 전형적인 증상(배뇨통·빈뇨) 없이 섬망·혼란·식욕저하 등으로 나타나는 경우가 많음."
+  },
+  {
+    q:"복압성요실금 대상자를 돕는 방법으로 옳은 것은?",
+    o:["수분 섭취를 권장한다",
+       "웃음치료에 참여하게 한다",
+       "식이섬유소 섭취를 제한한다",
+       "규칙적으로 줄넘기를 하게 한다",
+       "체중을 늘려 복부 내 압력을 높인다"],
+    e:"웃음치료에 참여하게 한다."
+  },
+  {
+    q:"노인에게 철분제를 투여할 때 흡수율을 높이기 위한 방법으로 옳은 것은?",
+    o:["우유와 함께 복용한다",
+       "녹차와 함께 복용한다",
+       "비타민 C가 풍부한 오렌지 주스와 함께 복용한다",
+       "식후에 바로 복용한다",
+       "칼슘 보충제와 동시에 복용한다"],
+    e:"식후에 바로 복용한다"
+  },
+  {
+    q:"노화로 인한 수면의 변화로 옳은 것은?",
+    o:["수면량이 증가한다",
+       "깊은 수면을 취한다",
+       "취침 중 각성 시간이 감소한다",
+       "낮 시간 동안 졸음이 감소한다",
+       "잠들기까지 시간이 오래 걸린다"],
+    e:"노화에 따라 잠들기까지 시간이 오래 걸리고, 수면 중 자주 깨며, 깊은 수면이 감소함."
+  },
+  {
+    q:"위염 증상을 완화하는 데에 도움이 되는 방법은?",
+    o:["하복부를 마사지한다",
+       "염장식품의 섭취를 격려한다",
+       "부드러운 유동식을 제공한다",
+       "음식을 뜨겁게 하여 제공한다",
+       "음식 섭취량을 늘리도록 한다"],
+    e:"음식을 뜨겁게 하여 제공한다."
+  },
+  {
+    q:"전립선비대증 대상자에게 나타날 수 있는 증상은?",
+    o:["낮에는 소변이 잘 안나와 힘들어도 밤에는 잘 잔다",
+       "배뇨 후 시원하다",
+       "배뇨 횟수가 감소한다",
+       "소변 줄기가 굵어진다",
+       "소변이 마려울 때 참기 힘들다"],
+    e:"전립선 비대증은 요도가 좁아져 긴박뇨(소변 참기 힘듦), 빈뇨, 잔뇨감, 세뇨(소변 줄기 가늘어짐) 등의 증상이 나타남."
+  },
+  {
+    q:"피부건조증 대상자를 돕는 방법으로 옳은 것은?",
+    o:["꼭 끼는 옷을 입게 한다",
+       "뜨거운 물로 목욕하게 한다",
+       "목욕 후 물기를 두드려 말려 준다",
+       "겨울철에는 제습기를 사용하게 한다",
+       "샤워를 자주 하여 피부 각질을 없앤다"],
+    e:"겨울철에는 제습기를 사용하게 한다."
+  },
+  {
+    q:"노화와 관련된 호흡기계의 특성으로 옳은 것은?",
+    o:["폐포의 탄력성이 증가하여 숨 쉬기가 편하다",
+       "콧속 점막에 습기가 증가하여 공기 흡입이 쉽다",
+       "기침반사가 증가하여 미세 물질을 걸러내기 쉽다",
+       "호흡근육이 약화되어 호흡 증가 시 피로해지기 쉽다",
+       "기관지 내 분비물이 감소하여 감염 발생 위험이 낮다"],
+    e:"기관지 내 분비물이 감소하여 감염 발생 위험이 낮다."
+  },
+  {
+    q:"노화에 따른 호흡기계 변화로 옳은 것은?",
+    o:["폐활량 증가",
+       "기침반사 증가",
+       "섬모운동 감소",
+       "코점막의 건조함 감소",
+       "기관지 내 분비물 감소"],
+    e:"코점막의 건조함 감소"
+  },
+  {
+    q:"전립선비대증의 발생 요인으로 옳은 것은?",
+    o:["요로 감염",
+       "체중 감소",
+       "소변 배설량 증가",
+       "규칙적 도뇨 시행",
+       "남성호르몬 불균형"],
+    e:"전립선 비대증은 노화에 따른 남성호르몬(테스토스테론) 불균형이 주요 발생 요인임."
+  },
+  {
+    q:"우울증 발생 가능성이 높은 대상자의 상황은?",
+    o:["가족과 함께 살고 있다",
+       "경로당 프로그램에 참여한다",
+       "낮에 햇빛을 쐬며 운동을 한다",
+       "최근 갑상샘기능저하증을 진단받았다",
+       "식욕과 체중이 변화 없이 유지되고 있다"],
+    e:"식욕과 체중이 변화 없이 유지되고 있다."
+  },
+  {
+    q:"당뇨병의 대표적인 증상으로 옳은 것은?",
+    o:["갈증 감소",
+       "식사량 감소",
+       "소변 배출량 감소",
+       "말초 부종 증가",
+       "수분 섭취량 증가"],
+    e:"당뇨병의 3다 증상 중 다음(多飲)은 갈증 증가로 수분 섭취량이 증가하는 것을 의미함."
+  },
+  {
+    q:"당뇨병 대상자를 돕는 방법으로 옳은 것은?",
+    o:["발톱은 둥글게 자른다",
+       "간식으로 과일주스를 제공한다",
+       "식사하고 30분~1시간 뒤에 운동하게 한다",
+       "인슐린 주사약을 구강으로 복용하게 한다",
+       "활동량이 많은 날은 고혈당에 주의하게 한다"],
+    e:"인슐린 주사약을 구강으로 복용하게 한다."
+  },
+  {
+    q:"노화에 따라 일반적으로 나타나는 호흡기계 변화는?",
+    o:["폐활량 증가",
+       "섬모운동 증가",
+       "폐포의 탄력성 증가",
+       "기침반사 감소",
+       "기관지 내 분비물 감소"],
+    e:"기관지 내 분비물 감소"
+  },
+  {
+    q:"다음 내용은 어떤 질환의 증상을 알아보기 위한 질문인가? (웃어 보세요, 말해 보세요, 양팔을 들어 보세요)",
+    o:["치매",
+       "파킨슨병",
+       "섬망",
+       "뇌졸중",
+       "우울증"],
+    e:"정답은 ④ '뇌졸중'입니다."
+  },
+  {
+    q:"치매의 증상 중 '정신행동 증상'에 해당하는 것은?",
+    o:["지남력 저하",
+       "실행증",
+       "망상과 환각",
+       "단기 기억력 감퇴",
+       "시공간 파악 능력 저하"],
+    e:"정답은 ③ '망상과 환각'입니다."
+  },
+  {
+    q:"초기 단계의 경증 치매에서 나타나는 특징적인 증상은?",
+    o:["환각",
+       "대소변 실금",
+       "단기기억력 저하",
+       "신체 활동 제한",
+       "의사소통 불가능"],
+    e:"정답은 ③ '단기기억력 저하'입니다."
+  },
+  {
+    q:"뇌졸중 대상자에게 나타나는 '구음장애(dysarthria)'와 '실어증(aphasia)'의 차이점으로 옳은 것은?",
+    o:["구음장애는 언어 이해 능력이 손상된 것이고, 실어증은 발음이 부정확한 것이다",
+       "구음장애는 말하는 근육의 마비로 발음이 어려운 것이고, 실어증은 뇌의 언어 중추 손상으로 언어 이해나 표현이 어려운 것이다",
+       "두 증상은 동일하다",
+       "구음장애만 뇌졸중에서 나타난다",
+       "실어증은 치료가 불가능하다"],
+    e:"두 증상은 동일하다"
+  },
+  {
+    q:"다음 중 치매의 '정신 행동 증상'이 아닌 것은?",
+    o:["환각과 착각",
+       "망상과 의심",
+       "지남력 저하",
+       "초조 및 공격성",
+       "배회와 수면 장애"],
+    e:"정답은 ③ '지남력 저하'입니다."
+  },
+  {
+    q:"파킨슨병에서 주의해야 할 약물은?",
+    o:["소화제",
+       "고혈압약",
+       "관절염약",
+       "비타민제",
+       "철분제"],
+    e:"정답은 ① '소화제'입니다."
+  },
+  {
+    q:"파킨슨 질환의 운동 증상 중, 단추를 끼우거나 글씨를 쓰는 등 행동이 점차 느려지는 증상은?",
+    o:["진전(떨림)",
+       "서동",
+       "경직",
+       "자세 불안정",
+       "운동 실조증"],
+    e:"정답은 ② '서동'입니다."
+  },
+  {
+    q:"다음은 어떤 질환의 주요 증상인가? (근육 긴장, 뻣뻣한 느낌, 굽어진 자세, 기립성 저혈압, 변비)",
+    o:["뇌졸중",
+       "치매",
+       "파킨슨 질환",
+       "퇴행성 관절염",
+       "골다공증"],
+    e:"정답은 ③ '파킨슨 질환'입니다."
+  },
+  {
+    q:"뇌의 혈액을 공급하는 혈관이 막히거나 터졌을 때 나타날 수 있는 증상은? (균형감각)",
+    o:["묽은 혈변",
+       "전신성 수포",
+       "관절 부위의 통증",
+       "몸의 균형감각 상실",
+       "가래가 나오는 기침"],
+    e:"가래가 나오는 기침"
+  },
+  {
+    q:"치매의 진행 단계 중, 거동이 불편해져 누워서만 지내게 되는 '와상 상태'가 시작되는 시기는?",
+    o:["치매 전 단계",
+       "초기",
+       "중기",
+       "말기",
+       "말기 이후"],
+    e:"정답은 ④ '말기'입니다."
+  },
+  {
+    q:"치매 대상자가 운동화 끈을 매지 못하는 등 순서를 밟아야 하는 일에 어려움을 느끼는 증상은?",
+    o:["지남력 저하",
+       "기억력 저하",
+       "시공간 파악 능력 저하",
+       "실행 기능 저하",
+       "판단력 저하"],
+    e:"정답은 ④ '실행 기능 저하'입니다."
+  },
+  {
+    q:"다음에서 설명하는 신경계 질환은? (도파민 분비 장애, 동작 느려짐, 근육 경직, 안정 시 떨림)",
+    o:["뇌졸중",
+       "뇌막염",
+       "파킨슨병",
+       "혈관성 치매",
+       "알츠하이머병"],
+    e:"정답은 ③ '파킨슨병'입니다."
+  },
+  {
+    q:"'말해 보세요, 웃어 보세요, 걸어 보세요'로 확인 가능한 질환은?",
+    o:["뇌졸중",
+       "파킨슨",
+       "치매",
+       "빈혈",
+       "심부전"],
+    e:"정답은 ① '뇌졸중'입니다."
+  },
+  {
+    q:"뇌졸중으로 좌측 뇌가 손상되었을 때 특징적으로 나타날 수 있는 증상은?",
+    o:["좌측 반신 마비",
+       "실어증",
+       "전신 마비",
+       "안정 시 떨림",
+       "우측 뇌의 손상"],
+    e:"정답은 ② '실어증'입니다."
+  },
+  {
+    q:"좌측 뇌가 손상된 대상자에게 나타날 수 있는 증상은?",
+    o:["전신마비",
+       "언어 장애",
+       "좌측 편마비",
+       "양측 안구통증",
+       "좌측 얼굴 감각 이상"],
+    e:"정답은 ② '언어 장애'입니다."
+  },
+  {
+    q:"뇌에 혈액을 공급하는 혈관이 막히거나 터졌을 때 나타날 수 있는 증상은?",
+    o:["얼굴 소양증",
+       "몸의 균형 상실",
+       "발작성 기침",
+       "붉은 혈변",
+       "양쪽 손발이 서서히 저려온다"],
+    e:"정답은 ② '몸의 균형 상실'입니다."
+  },
+  {
+    q:"파킨슨병 대상자에게 나타나는 비운동 증상을 모두 고른 것은?     ㄱ. 후각 저하  ㄴ. 변비  ㄷ. 우울증  ㄹ. 렘수면 행동장애  ㅁ. 안정 시 떨림?",
+    o:["ㄱ, ㄴ, ㄷ",
+       "ㄱ, ㄴ, ㄷ, ㄹ",
+       "ㄴ, ㄷ, ㅁ",
+       "ㄱ, ㄷ, ㅁ",
+       "ㄱ, ㄴ, ㄷ, ㄹ, ㅁ"],
+    e:"정답은 ② 'ㄱ, ㄴ, ㄷ, ㄹ'입니다."
+  },
+  {
+    q:"알츠하이머병 치매의 초기 증상으로 가장 대표적인 것은?",
+    o:["보행 장애",
+       "시력 저하",
+       "환각 증상",
+       "최근 기억력 감퇴",
+       "손발 떨림"],
+    e:"정답은 ④ '최근 기억력 감퇴'입니다."
+  },
+  {
+    q:"뇌졸중 대상자의 보행 보조 시 요양보호사의 위치로 옳은 것은?",
+    o:["대상자의 건측(건강한 쪽)에 선다",
+       "대상자의 환측(마비된 쪽)에 선다",
+       "대상자의 뒤에 선다",
+       "대상자의 앞에 선다",
+       "어느 쪽이든 상관없다"],
+    e:"대상자의 뒤에 선다"
+  },
+  {
+    q:"파킨슨병의 비운동 증상에 해당하지 않는 것은?",
+    o:["우울증",
+       "변비",
+       "수면 장애",
+       "안정 시 떨림",
+       "기립성 저혈압"],
+    e:"정답은 ④ '안정 시 떨림'입니다."
+  },
+  {
+    q:"다음에서 설명하는 신경계 질환은?  			• 도파민 분비 장애로 발생함   			• 동작이 느려지고 근육 경직, 안정 시 떨림이 나타남",
+    o:["뇌졸중",
+       "뇌막염",
+       "파킨슨병",
+       "혈관성 치매",
+       "알츠하이머병"],
+    e:"정답은 ③ '파킨슨병'입니다."
+  },
+  {
+    q:"뇌졸중 대상자가 식사 시 접시의 한쪽에만 음식을 먹는 현상이 관찰될 때, 가장 의심되는 증상은?",
+    o:["청력 저하",
+       "시력 저하",
+       "편측 무시(unilateral neglect)",
+       "연하장애",
+       "치아 결손"],
+    e:"정답은 ③ '편측 무시(unilateral neglect)'입니다."
+  },
+  {
+    q:"치매의 원인 질환 중 가장 많은 비율을 차지하는 것은?",
+    o:["혈관성 치매",
+       "알츠하이머병",
+       "루이체 치매",
+       "파킨슨병 치매",
+       "전측두엽 치매"],
+    e:"정답은 ② '알츠하이머병'입니다."
+  },
+  {
+    q:"다음의 방법을 통해 예측할 수 있는 질환은?  			• 말을 해보게 하여 발음이 정확한지 확인한다.   			• 웃어 보게 하여 입 모양이 좌우 대칭인지 확인한다.",
+    o:["빈혈",
+       "뇌졸중",
+       "신부전증",
+       "알츠하이머병",
+       "기립성 저혈압"],
+    e:"정답은 ② '뇌졸중'입니다."
+  },
+  {
+    q:"고혈압 대상자의 비약물적 관리 방법으로 옳은 것은?",
+    o:["나트륨(소금) 섭취를 하루 6g 이하로 제한한다",
+       "체중 관리는 혈압에 영향을 미치지 않는다",
+       "매일 30분 이상 규칙적인 유산소 운동은 혈압 상승에 기여한다",
+       "스트레스 관리는 혈압과 무관하다",
+       "금연은 혈압에 영향을 미치지 않는다"],
+    e:"체중 관리는 혈압에 영향을 미치지 않는다"
+  },
+  {
+    q:"절주를 돕는 방법으로 옳은 것은?",
+    o:["음주 일지를 작성하여 점검하게 한다",
+       "운동한 후에만 술을 마시게 한다",
+       "여러 종류의 술을 섞어 마시게 한다",
+       "집안에 잘 보이는 곳에 술을 전시하여 경각심을 가지게 한다",
+       "절주에 대한 결심을 주변 사람들에게 알리지 않게 한다"],
+    e:"운동한 후에만 술을 마시게 한다"
+  },
+  {
+    q:"항결핵제 복용 방법에 관한 설명으로 옳은 것은?",
+    o:["2주 동안 복용한다",
+       "증상이 없으면 복용량을 줄인다",
+       "약물 복용이 끝날 때까지 격리한다",
+       "주기적으로 간기능 검사를 하면서 복용한다",
+       "항결핵제 중 한 가지 약물을 복용하는 것이 원칙이다"],
+    e:"항결핵제 중 한 가지 약물을 복용하는 것이 원칙이다."
+  },
+  {
+    q:"온열 질환 중 열사병과 열탈진을 비교한 설명으로 옳은 것은?",
+    o:["열사병은 체온이 정상이고, 열탈진은 40℃ 이상의 고열이 나타난다",
+       "열사병은 피부가 차갑고 축축하며, 열탈진은 피부가 뜨겁고 건조하다",
+       "열사병은 40℃ 이상의 고열과 함께 뜨겁고 건조한 피부, 의식 장애가 나타나는 응급 상황이다",
+       "열탈진이 열사병보다 더 위험하다",
+       "열사병은 서늘한 곳에서 휴식만 취하면 된다"],
+    e:"열탈진이 열사병보다 더 위험하다"
+  },
+  {
+    q:"대상자의 운동 관리 방법으로 옳은 것은?",
+    o:["땀복을 입혀 운동 효과를 극대화한다",
+       "준비 운동을 생략하고 본 운동을 시작한다",
+       "개인의 운동 능력보다 높은 수준으로 계획한다",
+       "운동 효과를 높이기 위해 쉬지 않고 운동한다",
+       "안정 시 심박동수로 돌아올 때까지 마무리 운동을 한다"],
+    e:"심박동수가 안정될 때까지 마무리 운동을 철저히 해야 함."
+  },
+  {
+    q:"노인에게 안전한 운동 방법은?",
+    o:["준비 운동은 3분 이내로 한다",
+       "방향을 빠르게 바꾸는 운동을 한다",
+       "저강도에서 고강도 순으로 운동한다",
+       "운동 시간을 서서히 줄인다",
+       "마무리 운동은 생략한다"],
+    e:"운동 시간을 서서히 줄인다."
+  },
+  {
+    q:"노년기의 성적 활동에 대한 설명으로 옳은 것은?",
+    o:["성 능력이 감퇴한다",
+       "생리적인 반응 유형이 변한다",
+       "성 반응의 시간상 유형은 변화가 없다",
+       "초기 형성된 성행위의 유형이 계속되는 경향이 있다",
+       "빈도는 남녀 간 차이가 없다"],
+    e:"빈도는 남녀 간 차이가 없다"
+  },
+  {
+    q:"옴에 감염된 대상자를 안전하게 돕는 방법으로 옳은 것은?",
+    o:["감염 부위를 만져 보아 열감을 확인한다",
+       "오염된 속옷은 찬물로 세탁한 후 말린다",
+       "매일 아침 가려운 부위에 연고를 발라 준다",
+       "세탁이 어려운 침구는 다리미로 다린 후 사용한다",
+       "대상자와 접촉한 후 24시간 내에 예방접종을 받는다"],
+    e:"대상자와 접촉한 후 24시간 내에 예방접종을 받는다."
+  },
+  {
+    q:"노인 약물 복용 방법으로 옳은 것은? (건강기능식품)",
+    o:["위장 장애 시 용량 감소",
+       "삼키기 힘들면 쪼개서 복용",
+       "효과 없으면 임의 중단",
+       "건강기능식품 섭취 시 의사와 상의",
+       "유사 증상 타인 약 복용"],
+    e:"유사 증상 타인 약 복용"
+  },
+  {
+    q:"다음에서 설명하는 감염성 질환은?  • 오염된 음식을 섭취하여 발생함   • 구토, 메스꺼움, 오한, 복통, 설사 증상이 있음",
+    o:["옴",
+       "결핵",
+       "독감",
+       "머릿니",
+       "노로바이러스 장염"],
+    e:"오염된 음식 섭취 후 구토·설사·복통이 나타나는 것은 노로바이러스 장염의 전형적 증상임."
+  },
+  {
+    q:"노인이 운동을 꺼리게 되는 신체적인 변화는?",
+    o:["근육 피로도 감소",
+       "폐활량 증가",
+       "자극에 대한 반응 감소",
+       "심장 근육의 수축력 향상",
+       "골밀도 증가"],
+    e:"심장 근육의 수축력 향상"
+  },
+  {
+    q:"대상자가 두통이 있을 때마다 비처방약을 구입하여 복용할 때 대처방법은?",
+    o:["장용 코팅제는 쪼개서 복용하게 한다",
+       "한 번에 많은 양을 구입해 두도록 한다",
+       "약 복용을 자제하고 통증을 최대한 참게 한다",
+       "비처방약도 복용하기 전에 의사와 상담하게 한다",
+       "증상이 비슷한 다른 대상자의 약을 복용하게 한다"],
+    e:"증상이 비슷한 다른 대상자의 약을 복용하게 한다."
+  },
+  {
+    q:"약 복용 시 주의해야 하는 음식물에 대한 설명이 옳은 것은?",
+    o:["자몽 주스는 와파린과 함께 먹으면 약효가 줄어든다",
+       "시금치는 고지혈증 약과 복용하면 부작용을 일으킬 수 있다",
+       "우유는 약과 같이 먹을 때 예상치 않았던 문제가 생길 수 있다",
+       "두부는 혈압약과 함께 먹으면 부작용이 일어날 수 있다",
+       "커피, 유제품, 인삼 등은 약과 같이 먹을 때 예상치 않았던 문제가 생길 수 있다"],
+    e:"커피, 유제품, 인삼 등은 특정 약물과 복용 시 부작용을 일으킬 수 있음."
+  },
+  {
+    q:"65세 이상 노인에게 매년 1회 권장되는 예방접종은?",
+    o:["파상풍",
+       "백일해",
+       "대상포진",
+       "폐렴구균",
+       "인플루엔자"],
+    e:"인플루엔자(독감) 예방접종은 65세 이상 노인에게 매년 1회 접종을 권장함."
+  },
+  {
+    q:"대상자의 영양 관리 방법으로 옳은 것은?",
+    o:["음식이 뜨거울 때 간을 맞춘다",
+       "비타민 A 섭취로 칼슘 흡수를 돕는다",
+       "과일류 위주로 하루 세 끼 식사를 한다",
+       "육류, 생선, 유제품을 일주일에 한 번 섭취한다",
+       "식초, 후추, 파, 마늘과 같은 향신료를 사용한다"],
+    e:"미각 저하로 짠맛을 덜 느끼므로 향신료를 사용하여 입맛을 돋움."
+  },
+  {
+    q:"대장암 예방을 고려한 식이요법으로 옳은 것은?",
+    o:["통곡물로 만든 음식을 제공한다",
+       "고칼로리 음식을 제공한다",
+       "야식으로 가공식품을 제공한다",
+       "훈연된 동물성 식품을 제공한다",
+       "지방함량이 높은 음식을 제공한다"],
+    e:"고칼로리 음식을 제공한다."
+  }
+];
+const C=["①","②","③","④","⑤"];
+</script>
+<div class="progress-bar" id="progBar"></div>
+<div id="startScreen" class="container">
+  <div class="header"><h1>요양보호사 양성과정<br>1차 종합 모의고사</h1><p>제5장~제7장 기출 종합 | 60문항</p></div>
+  <div class="card"><h2>응시자 정보</h2><div class="input-wrap"><label>이름을 입력하세요</label><input type="text" id="nameInput" placeholder="홍길동" autocomplete="off"></div><button class="btn btn-primary" onclick="startExam()">시험 시작</button></div>
+  <button class="btn btn-secondary" onclick="showAdmin()">관리자 모드</button>
+</div>
+<div id="examScreen" class="container hidden"><div class="progress-info" id="progInfo"></div><div id="examBody"></div><div class="submit-area"><button class="btn btn-danger" onclick="submitExam()">답안 제출</button></div></div>
+<div id="lockScreen" class="container hidden"><div class="lock-screen"><div class="icon">🔒</div><h2 style="font-size:18px;margin-bottom:8px">답안이 제출되었습니다</h2><p style="font-size:14px;color:#94a3b8;margin-bottom:20px">결과를 확인하려면 결과확인 코드를 입력하세요</p><input type="text" class="lock-input" id="unlockInput" placeholder="코드" maxlength="10" inputmode="numeric"><button class="btn btn-primary" style="width:200px;margin:12px auto" onclick="tryUnlock()">결과 확인</button><p class="lock-msg" id="lockMsg"></p><p style="font-size:12px;color:#475569;margin-top:20px">시험 종료 후 관리자가 카카오톡에<br>결과확인 코드를 안내합니다</p></div></div>
+<div id="resultScreen" class="container hidden"></div>
+<div id="adminScreen" class="hidden"><div class="admin-panel"><div class="header"><h1>관리자 모드</h1><p>시험 운영 관리</p></div><div id="admContent"></div><button class="btn btn-secondary" onclick="hideAdmin()">← 메인으로 돌아가기</button></div></div>
+<script>
+let userName="",answers=new Array(TOTAL).fill(0),submitted=false;
+function startExam(){const n=document.getElementById("nameInput").value.trim();if(!n){alert("이름을 입력해 주세요.");return}userName=n;const saved=localStorage.getItem("exam1st_"+userName);if(saved){const d=JSON.parse(saved);answers=d.answers;submitted=true;document.getElementById("startScreen").classList.add("hidden");document.getElementById("lockScreen").classList.remove("hidden");return}buildExam();document.getElementById("startScreen").classList.add("hidden");document.getElementById("examScreen").classList.remove("hidden");updateProgress()}
+function buildExam(){let h="",si=0;Q.forEach((q,i)=>{if(si<SECS.length&&(i+1)===SECS[si].s){h+=`<div class="section-title">${SECS[si].t}</div>`;si++}h+=`<div class="q-card" id="q${i}"><span class="q-num">${i+1}번</span><div class="q-text">${q.q}</div><div class="opt-list">`;q.o.forEach((o,j)=>{h+=`<div class="opt-btn" onclick="selectOpt(this,${i},${j+1})"><span class="opt-circle">${C[j]}</span><span>${o}</span></div>`});h+=`</div></div>`});document.getElementById("examBody").innerHTML=h}
+function selectOpt(el,qi,oi){if(submitted)return;const opts=el.parentElement.children;for(let o of opts)o.classList.remove("selected");el.classList.add("selected");answers[qi]=oi;updateProgress()}
+function updateProgress(){const a=answers.filter(x=>x>0).length;document.getElementById("progBar").style.width=(a/TOTAL*100)+"%";document.getElementById("progInfo").textContent=`${a} / ${TOTAL} 문항 응답 완료`}
+function submitExam(){const a=answers.filter(x=>x>0).length;const u=TOTAL-a;let msg=`총 ${TOTAL}문항 중 ${a}문항 응답하셨습니다.`;if(u>0)msg+=`\n미응답 ${u}문항이 있습니다.`;msg+="\n\n제출하시겠습니까? 제출 후에는 수정할 수 없습니다.";if(!confirm(msg))return;submitted=true;localStorage.setItem("exam1st_"+userName,JSON.stringify({answers:answers,time:new Date().toISOString()}));document.getElementById("examScreen").classList.add("hidden");document.getElementById("lockScreen").classList.remove("hidden");document.getElementById("progBar").style.width="100%"}
+function tryUnlock(){const code=document.getElementById("unlockInput").value.trim();if(code===UNLOCK_CODE){showResult()}else{document.getElementById("lockMsg").textContent="코드가 일치하지 않습니다.";document.getElementById("lockMsg").style.color="#ef4444"}}
+function showResult(){document.getElementById("lockScreen").classList.add("hidden");document.getElementById("resultScreen").classList.remove("hidden");let correct=0;answers.forEach((a,i)=>{if(a===ANS[i])correct++});const score=Math.round(correct/TOTAL*100);const pass=correct>=PASS_SCORE;let h=`<div class="result-header"><div class="score-circle ${pass?'pass':'fail'}"><div class="num">${score}</div><div class="unit">점</div></div><h2 style="font-size:18px;color:${pass?'#22c55e':'#ef4444'}">${pass?'🎉 합격':'다시 도전해 보세요'}</h2><div class="score-detail">${TOTAL}문항 중 ${correct}문항 정답 (합격기준: ${PASS_SCORE}문항)</div></div>`;let si=0;Q.forEach((q,i)=>{if(si<SECS.length&&(i+1)===SECS[si].s){h+=`<div class="section-title">${SECS[si].t}</div>`;si++}const ok=answers[i]===ANS[i];h+=`<div class="r-card ${ok?'correct':'wrong'}"><span class="r-badge ${ok?'correct':'wrong'}">${ok?'✓ 정답':'✗ 오답'}</span><div class="r-q">${i+1}. ${q.q}</div>`;if(!ok)h+=`<div class="r-ans">내 답: ${C[answers[i]-1]||'미응답'} ${answers[i]>0?q.o[answers[i]-1]:''}</div>`;h+=`<div class="r-ans" style="color:#60a5fa">정답: ${C[ANS[i]-1]} ${q.o[ANS[i]-1]}</div><div class="r-expl">💡 ${q.e}</div></div>`});h+=`<div style="padding:20px 0;text-align:center"><button class="btn btn-secondary" onclick="resetExam()">다시 시험 보기</button></div>`;document.getElementById("resultScreen").innerHTML=h}
+function resetExam(){localStorage.removeItem("exam1st_"+userName);location.reload()}
+function showAdmin(){const pw=prompt("관리자 비밀번호를 입력하세요:");if(pw!==ADMIN_PW){if(pw!==null)alert("비밀번호가 일치하지 않습니다.");return}document.getElementById("startScreen").classList.add("hidden");document.getElementById("adminScreen").classList.remove("hidden");let h=`<div class="adm-section"><h3>📋 시험 운영 가이드</h3><div class="guide-step"><div class="guide-num">1</div><div class="guide-text"><b>시험 전</b> — index.html을 Netlify Drop에 업로드 후 링크를 카카오톡 단체방에 공유합니다.</div></div><div class="guide-step"><div class="guide-num">2</div><div class="guide-text"><b>시험 중</b> — 교육생이 링크를 터치하여 이름 입력 후 응시합니다.</div></div><div class="guide-step"><div class="guide-num">3</div><div class="guide-text"><b>시험 후</b> — 아래 카카오톡 안내 문구를 단체방에 전송합니다.</div></div></div>`;const k1="📝 1차 종합 모의고사 안내\n\n아래 링크를 터치하여 시험에 응시해 주세요.\n이름을 입력하신 후 시험이 시작됩니다.\n\n⏰ 시험 시간: 제한 없음\n📌 총 60문항 (제5장~제7장 기출 종합)\n✅ 60점 이상 합격\n\n👉 시험 링크: (여기에 링크 붙여넣기)";const k2="✅ 시험이 종료되었습니다.\n\n결과확인 코드: "+UNLOCK_CODE+"\n\n제출 화면에서 위 코드를 입력하면\n점수와 해설을 확인할 수 있습니다.\n\n60문항 중 "+PASS_SCORE+"문항(60점) 이상이면 합격입니다.";h+=`<div class="adm-section"><h3>💬 카카오톡 발송 문구</h3><p style="font-size:12px;color:#94a3b8;margin-bottom:8px">아래 문구를 복사하여 카카오톡에 붙여넣기 하세요</p><div class="kakao-msg">${k1.replace(/\n/g,"<br>")}</div><button class="copy-btn" onclick="copyText(\`${k1}\`)">📋 시험 안내 복사</button><div class="kakao-msg" style="margin-top:16px">${k2.replace(/\n/g,"<br>")}</div><button class="copy-btn" onclick="copyText(\`${k2}\`)">📋 결과 안내 복사</button></div>`;h+=`<div class="adm-section"><h3>📊 정답표 (60문항)</h3><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:10px">`;ANS.forEach((a,i)=>{h+=`<div style="text-align:center;padding:6px 0;background:#0f172a;border-radius:8px;font-size:12px"><span style="color:#64748b">${i+1}.</span> <span style="color:#60a5fa;font-weight:700">${C[a-1]}</span></div>`});h+=`</div></div>`;document.getElementById("admContent").innerHTML=h}
+function hideAdmin(){document.getElementById("adminScreen").classList.add("hidden");document.getElementById("startScreen").classList.remove("hidden")}
+function copyText(t){navigator.clipboard.writeText(t).then(()=>alert("복사되었습니다!")).catch(()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);alert("복사되었습니다!")})}
+</script>
+</body>
+</html>
