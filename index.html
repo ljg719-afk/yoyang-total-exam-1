@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>요양보호사 1차 종합 모의고사</title>
+<style>
+:root {
+  --primary: #1a5276;
+  --primary-light: #2980b9;
+  --accent: #e74c3c;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --bg: #f0f3f7;
+  --card: #ffffff;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --border: #dce1e8;
+  --correct-bg: #eafaf1;
+  --wrong-bg: #fdedec;
+  --correct-border: #27ae60;
+  --wrong-border: #e74c3c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-text-size-adjust:100%; }
+.container { max-width:720px; margin:0 auto; padding:12px; }
+.header { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; padding:24px 20px; border-radius:16px; margin-bottom:16px; text-align:center; }
+.header h1 { font-size:1.3em; margin-bottom:4px; }
+.header .subtitle { font-size:0.85em; opacity:0.9; }
+.header .badge { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; font-size:0.75em; margin-top:8px; }
+.card { background:var(--card); border-radius:14px; padding:20px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-weight:700; margin-bottom:6px; font-size:0.9em; color:var(--primary); }
+.form-group input { width:100%; padding:12px 14px; border:2px solid var(--border); border-radius:10px; font-size:1em; transition:border-color 0.2s; }
+.form-group input:focus { outline:none; border-color:var(--primary-light); }
+.btn { display:inline-block; padding:12px 28px; border:none; border-radius:10px; font-size:1em; font-weight:700; cursor:pointer; transition:all 0.2s; text-align:center; }
+.btn-primary { background:var(--primary); color:#fff; width:100%; }
+.btn-primary:hover { background:var(--primary-light); }
+.btn-accent { background:var(--accent); color:#fff; width:100%; }
+.btn-accent:hover { background:#c0392b; }
+.btn-success { background:var(--success); color:#fff; }
+.btn-success:hover { background:#219a52; }
+.btn-small { padding:8px 16px; font-size:0.85em; border-radius:8px; }
+.btn-outline { background:transparent; border:2px solid var(--primary); color:var(--primary); }
+.btn-outline:hover { background:var(--primary); color:#fff; }
+.progress-bar { background:#e8ecf1; border-radius:10px; height:8px; margin:12px 0; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius:10px; transition:width 0.4s ease; }
+.info-bar { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--card); border-radius:10px; margin-bottom:12px; font-size:0.85em; font-weight:600; box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+.timer { color:var(--accent); font-size:1.1em; }
+.timer.warning { animation:blink 1s infinite; }
+@keyframes blink { 50%{opacity:0.5} }
+.section-header { background:linear-gradient(135deg,#2c3e50,#34495e); color:#fff; padding:14px 18px; border-radius:12px; margin:18px 0 12px; font-size:0.95em; font-weight:700; }
+.section-header .sec-num { opacity:0.8; font-size:0.8em; display:block; margin-bottom:2px; }
+.q-card { background:var(--card); border-radius:14px; padding:18px; margin-bottom:12px; border-left:4px solid var(--primary-light); box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+.q-card .q-num { display:inline-block; background:var(--primary); color:#fff; width:28px; height:28px; border-radius:50%; text-align:center; line-height:28px; font-size:0.8em; font-weight:700; margin-right:8px; }
+.q-card .q-text { font-weight:600; font-size:0.95em; margin-bottom:14px; line-height:1.7; }
+.options { list-style:none; }
+.options li { padding:11px 14px; margin-bottom:6px; border:2px solid var(--border); border-radius:10px; cursor:pointer; transition:all 0.2s; font-size:0.9em; line-height:1.5; }
+.options li:hover { border-color:var(--primary-light); background:#f7fafc; }
+.options li.selected { border-color:var(--primary); background:#ebf5fb; font-weight:600; }
+.options li.correct { border-color:var(--correct-border); background:var(--correct-bg); }
+.options li.wrong { border-color:var(--wrong-border); background:var(--wrong-bg); }
+.options li .opt-marker { display:inline-block; width:22px; height:22px; border-radius:50%; border:2px solid var(--border); text-align:center; line-height:18px; font-size:0.75em; font-weight:700; margin-right:8px; vertical-align:middle; }
+.options li.selected .opt-marker { background:var(--primary); color:#fff; border-color:var(--primary); }
+.options li.correct .opt-marker { background:var(--correct-border); color:#fff; border-color:var(--correct-border); }
+.options li.wrong .opt-marker { background:var(--wrong-border); color:#fff; border-color:var(--wrong-border); }
+.explanation { margin-top:12px; padding:12px 14px; border-radius:10px; font-size:0.85em; line-height:1.7; display:none; }
+.explanation.show { display:block; }
+.explanation.correct { background:var(--correct-bg); border:1px solid var(--correct-border); }
+.explanation.wrong { background:var(--wrong-bg); border:1px solid var(--wrong-border); }
+.explanation .exp-title { font-weight:700; margin-bottom:4px; }
+.result-box { text-align:center; padding:30px 20px; }
+.result-score { font-size:3em; font-weight:800; margin:10px 0; }
+.result-score.pass { color:var(--success); }
+.result-score.fail { color:var(--accent); }
+.result-badge { display:inline-block; padding:6px 20px; border-radius:20px; font-size:1em; font-weight:700; color:#fff; margin:10px 0; }
+.result-badge.pass { background:var(--success); }
+.result-badge.fail { background:var(--accent); }
+.score-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.85em; }
+.score-table th,.score-table td { padding:10px 12px; border:1px solid var(--border); text-align:center; }
+.score-table th { background:var(--primary); color:#fff; font-weight:600; }
+.score-table tr:nth-child(even) { background:#f8f9fa; }
+.score-table .total-row { background:#ebf5fb; font-weight:700; }
+.nav-bottom { display:flex; gap:8px; padding:12px 0; position:sticky; bottom:0; background:var(--bg); }
+.nav-bottom .btn { flex:1; }
+.admin-section { margin-top:12px; }
+.admin-section h3 { color:var(--primary); margin-bottom:10px; font-size:0.95em; }
+.answer-grid { display:grid; gap:4px; font-size:0.8em; }
+.answer-grid .ag-cell { padding:6px; text-align:center; background:#f8f9fa; border-radius:6px; border:1px solid var(--border); }
+.answer-grid .ag-head { background:var(--primary); color:#fff; font-weight:700; }
+.screen { display:none; }
+.screen.active { display:block; }
+.answer-num-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:12px 0; }
+.answer-num-cell { width:100%; aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8em; font-weight:700; border:2px solid var(--border); background:#fff; cursor:pointer; transition:all 0.2s; }
+.answer-num-cell.answered { background:var(--primary); color:#fff; border-color:var(--primary); }
+.answer-num-cell.current { border-color:var(--accent); box-shadow:0 0 0 3px rgba(231,76,60,0.2); }
+.copy-box { background:#f8f9fa; border:1px solid var(--border); border-radius:10px; padding:14px; font-size:0.85em; line-height:1.7; white-space:pre-line; margin:10px 0; }
+@media(max-width:400px){ .container{padding:8px;} .header h1{font-size:1.1em;} .q-card{padding:14px;} .options li{padding:10px 12px;font-size:0.85em;} }
+html { scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<!-- 시작 화면 -->
+<div class="screen active" id="screenStart">
+  <div class="header">
+    <h1>요양보호사 양성과정</h1>
+    <div class="subtitle">1차 종합 모의고사</div>
+    <div class="badge">제5장~제7장 기출 종합 | 60문항</div>
+  </div>
+  <div class="card">
+    <div class="form-group">
+      <label>👤 이름을 입력하세요</label>
+      <input type="text" id="studentName" placeholder="예: 홍길동" maxlength="10">
+    </div>
+    <button class="btn btn-primary" onclick="startExam()">📝 시험 시작</button>
+    <div style="margin-top:14px;text-align:center;">
+      <button class="btn btn-small btn-outline" onclick="showAdmin()">🔐 관리자 모드</button>
+    </div>
+  </div>
+  <div class="card" style="font-size:0.82em;color:var(--text-light);">
+    <strong>📋 시험 안내</strong><br>
+    • 총 60문항 (5지선다형)<br>
+    • 제5장 노화에 따른 변화와 질환 (1~20번)<br>
+    • 제6장 치매·뇌졸중·파킨슨 질환 (21~44번)<br>
+    • 제7장 건강증진 및 질병예방 (45~60번)<br>
+    • 제한시간 60분 | 합격기준 60점 이상<br>
+    • 제출 후 결과확인 코드 입력 시 성적 확인 가능
+  </div>
+</div>
+
+<!-- 시험 화면 -->
+<div class="screen" id="screenExam">
+  <div class="info-bar">
+    <span id="examProgress">0 / 60</span>
+    <span class="timer" id="examTimer">60:00</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div id="answerMap" style="margin-bottom:12px;"></div>
+  <div id="questionArea"></div>
+  <div class="nav-bottom">
+    <button class="btn btn-outline btn-small" onclick="scrollToTop()">⬆ 맨 위로</button>
+    <button class="btn btn-accent" onclick="confirmSubmit()">📮 제출하기</button>
+  </div>
+</div>
+
+<!-- 제출 확인 -->
+<div class="screen" id="screenSubmitConfirm">
+  <div class="header"><h1>📮 시험 제출 확인</h1></div>
+  <div class="card result-box">
+    <p style="font-size:1.1em;font-weight:700;margin-bottom:16px;" id="submitSummary"></p>
+    <p style="font-size:0.85em;color:var(--text-light);margin-bottom:20px;">제출 후에는 수정할 수 없습니다.</p>
+    <button class="btn btn-accent" onclick="submitExam()" style="margin-bottom:10px;">✅ 최종 제출</button>
+    <button class="btn btn-outline" onclick="goBackToExam()">↩ 돌아가기</button>
+  </div>
+</div>
+
+<!-- 코드 입력 -->
+<div class="screen" id="screenCode">
+  <div class="header"><h1>📋 제출 완료</h1><div class="subtitle" id="submitTime"></div></div>
+  <div class="card">
+    <div class="form-group">
+      <label>🔑 결과확인 코드를 입력하세요</label>
+      <input type="password" id="resultCode" placeholder="코드 입력" maxlength="10">
+    </div>
+    <button class="btn btn-primary" onclick="checkCode()">결과 확인</button>
+  </div>
+</div>
+
+<!-- 결과 -->
+<div class="screen" id="screenResult">
+  <div class="header"><h1>📊 성적표</h1><div class="subtitle" id="resultName"></div></div>
+  <div class="card result-box">
+    <div class="result-score" id="resultScore"></div>
+    <div id="resultBadge"></div>
+  </div>
+  <div class="card">
+    <table class="score-table">
+      <thead><tr><th>구분</th><th>문항수</th><th>정답</th><th>오답</th><th>정답률</th></tr></thead>
+      <tbody id="scoreBody"></tbody>
+    </table>
+  </div>
+  <div class="card">
+    <button class="btn btn-primary" onclick="showReview()" style="margin-bottom:8px;">📖 해설 보기</button>
+    <button class="btn btn-outline" onclick="location.reload()">🏠 처음으로</button>
+  </div>
+</div>
+
+<!-- 해설 -->
+<div class="screen" id="screenReview">
+  <div class="header"><h1>📖 오답노트 & 해설</h1><div class="subtitle" id="reviewSubtitle"></div></div>
+  <div style="margin-bottom:10px;display:flex;gap:6px;">
+    <button class="btn btn-small btn-outline" onclick="filterReview('all')" id="filterAll">전체</button>
+    <button class="btn btn-small btn-outline" onclick="filterReview('wrong')" id="filterWrong">오답만</button>
+  </div>
+  <div id="reviewArea"></div>
+  <div class="nav-bottom">
+    <button class="btn btn-outline" onclick="showScreen('screenResult')">← 성적표</button>
+    <button class="btn btn-primary" onclick="scrollToTop()">⬆ 맨 위로</button>
+  </div>
+</div>
+
+<!-- 관리자 -->
+<div class="screen" id="screenAdmin">
+  <div class="header"><h1>🔐 관리자 모드</h1></div>
+  <div class="card" id="adminLogin">
+    <div class="form-group">
+      <label>관리자 비밀번호</label>
+      <input type="password" id="adminPw" placeholder="비밀번호 입력" maxlength="20">
+    </div>
+    <button class="btn btn-primary" onclick="adminAuth()">로그인</button>
+    <button class="btn btn-outline" onclick="showScreen('screenStart')" style="margin-top:8px;">← 돌아가기</button>
+  </div>
+  <div id="adminContent" style="display:none;">
+    <div class="card admin-section">
+      <h3>📋 운영 가이드</h3>
+      <div style="font-size:0.82em;line-height:1.8;">
+        1. 이 파일을 GitHub Pages 또는 Netlify로 배포<br>
+        2. 배포된 URL을 카카오톡 단체방에 공유<br>
+        3. 수강생: 이름 입력 → 시험 응시 → 제출<br>
+        4. 결과확인 코드 <b>2025</b> 입력 시 성적 확인<br>
+        5. 합격 기준: 60점 이상 (60문항 중 36문항)
+      </div>
+    </div>
+    <div class="card admin-section">
+      <h3>📌 정답표</h3>
+      <div class="answer-grid" id="answerGrid"></div>
+    </div>
+    <div class="card admin-section">
+      <h3>💬 카카오톡 발송 문구</h3>
+      <div class="copy-box" id="kakaoMsg">📝 요양보호사 양성과정
+[1차 종합 모의고사]
+
+📚 범위: 제5장~제7장 기출 종합
+📋 문항: 60문항 (5지선다)
+⏰ 시간: 60분
+✅ 합격: 60점 이상
+
+👉 시험 링크:
+(여기에 배포 URL 입력)
+
+📌 시험 후 결과확인 코드: 2025
+🙏 이름을 정확히 입력해 주세요!</div>
+      <button class="btn btn-small btn-success" onclick="copyKakao()">📋 문구 복사</button>
+    </div>
+    <div class="card"><button class="btn btn-outline" onclick="showScreen('screenStart')">← 돌아가기</button></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+var CONFIG={adminPw:'admin2025',resultCode:'2025',passScore:60,timeLimit:60*60,title:'1차 종합 모의고사'};
+
+var ANS=[4,5,3,5,4,3,5,1,3,5,3,5,3,4,3,5,4,5,3,4,4,3,3,2,3,1,2,3,4,4,4,3,1,2,2,2,2,4,2,4,3,3,2,2,1,1,4,3,5,3,4,4,4,5,3,4,5,5,5,1];
+
+var SECS=[
+  {name:'제5장 노화에 따른 변화와 질환',from:1,to:20,count:20},
+  {name:'제6장 치매·뇌졸중·파킨슨 질환',from:21,to:44,count:24},
+  {name:'제7장 건강증진 및 질병예방',from:45,to:60,count:16},
+];
+
+var Q=[
+// ===== 제5장 (1~20) =====
+{q:"노인의 수술 후 합병증 예방을 위해 요양보호사가 수행해야 할 관리로 옳지 않은 것은?",
+o:["조기 이상(가능한 빨리 침대에서 일어나 움직이기)을 격려한다","심호흡과 기침을 격려하여 폐 합병증을 예방한다","체위를 변경하여 욕창을 예방한다","통증이 있어도 침상 안정만 취하게 한다","충분한 수분 섭취를 격려한다"],
+e:"수술 후 통증이 있더라도 가능한 한 조기 이상(조기 거동)이 중요함. 침상 안정만 취하면 폐 합병증(무기폐, 폐렴), 혈전(심부정맥혈전증), 욕창, 장 마비 등의 합병증이 발생할 수 있음."},
+
+{q:"결핵 대상자와 접촉한 후 요양보호사의 대처로 옳은 것은?",
+o:["백일해 예방접종을 한다","멸균소독 가운을 착용한다","예방적 항생제를 복용한다","기침을 할 때는 손으로 가리고 한다","감염 여부를 확인하기 위해 검사를 한다"],
+e:"결핵 대상자와 접촉한 경우 감염 여부를 확인하기 위해 투베르쿨린 검사(TST) 또는 인터페론감마 분비검사(IGRA) 등 결핵 검사를 받아야 함."},
+
+{q:"퇴행성 관절염과 류마티스 관절염을 비교한 설명으로 옳은 것은?",
+o:["퇴행성 관절염은 자가면역 질환이다","류마티스 관절염은 주로 체중 부하 관절에 발생한다","퇴행성 관절염의 관절 뻣뻣함은 주로 아침에 30분 이내로 나타나고, 류마티스 관절염은 1시간 이상 지속된다","두 질환 모두 관절 외 전신 증상이 나타난다","퇴행성 관절염은 좌우 대칭적으로 나타난다"],
+e:"퇴행성 관절염은 관절 연골의 퇴행성 변화로 발생하며, 아침 강직이 30분 이내로 짧음. 류마티스 관절염은 자가면역 질환으로 아침 강직이 1시간 이상 지속되며, 좌우 대칭적으로 나타남."},
+
+{q:"골다공증으로 고관절 골절의 위험이 높은 대상자에게 행동 수정이 필요한 경우는?",
+o:["연어, 고등어, 달걀을 자주 섭취한다","규칙적으로 하지근력 강화운동을 한다","거실에 널려 있는 물건이 없도록 청소한다","안경도수가 맞지 않아 안경을 새로 맞추었다","저체중 상태를 유지하기 위해 다이어트를 한다"],
+e:"저체중은 골밀도를 낮추어 골절 위험을 높이므로 다이어트보다 적정 체중 유지가 필요함."},
+
+{q:"노화에 따른 신경계 변화로 옳은 것은?",
+o:["뇌 무게가 증가한다","신경전달 속도가 빨라진다","뇌 혈류량이 증가한다","반응 시간이 길어지고 균형 감각이 저하된다","신경세포의 수가 증가한다"],
+e:"노화에 따라 뇌 무게가 감소하고, 신경세포의 수가 줄어들며, 신경전달 속도가 느려짐. 이로 인해 반응 시간이 길어지고 균형 감각이 저하되어 낙상 위험이 높아짐."},
+
+{q:"전립선비대증을 관리하는 방법으로 옳은 것은?",
+o:["성생활을 금한다","소변량을 증가시키기 위해 맥주를 마신다","고지방과 고콜레스테롤 음식 섭취를 피한다","소변을 참을 수 있을 때까지 참는다","약화된 근육을 강화하기 위해 체중을 늘린다"],
+e:"전립선비대증 관리를 위해 고지방·고콜레스테롤 음식 섭취를 피하고 규칙적인 배뇨 습관을 유지해야 함. 알코올은 전립선 충혈을 유발하여 증상을 악화시킴."},
+
+{q:"노인에서 요로감염이 잘 발생하는 이유로 옳은 것을 모두 고른 것은?\nㄱ. 방광의 잔뇨량 증가\nㄴ. 면역기능 저하\nㄷ. 요도 점막의 방어 기능 약화\nㄹ. 전립선 비대(남성)로 인한 요 정체",
+o:["ㄱ, ㄴ","ㄱ, ㄴ, ㄷ","ㄱ, ㄴ, ㄹ","ㄱ, ㄷ, ㄹ","ㄱ, ㄴ, ㄷ, ㄹ"],
+e:"노인에서 요로감염이 잘 발생하는 이유는 모두 해당됨. 방광 수축력 저하로 잔뇨량 증가, 면역기능 저하, 요도 점막 방어 기능 약화, 남성의 전립선 비대로 인한 요 정체 모두 요로감염의 위험인자임."},
+
+{q:"복압성요실금 대상자를 돕는 방법으로 옳은 것은?",
+o:["수분 섭취를 권장한다","웃음치료에 참여하게 한다","식이섬유소 섭취를 제한한다","규칙적으로 줄넘기를 하게 한다","체중을 늘려 복부 내 압력을 높인다"],
+e:"복압성요실금은 기침, 재채기, 줄넘기 등 복압이 증가할 때 소변이 새는 증상임. 충분한 수분 섭취를 권장하여 농축된 소변으로 인한 방광 자극을 줄이고, 케겔 운동이 효과적임."},
+
+{q:"노인에게 철분제를 투여할 때 흡수율을 높이기 위한 방법으로 옳은 것은?",
+o:["우유와 함께 복용한다","녹차와 함께 복용한다","비타민 C가 풍부한 오렌지 주스와 함께 복용한다","식후에 바로 복용한다","칼슘 보충제와 동시에 복용한다"],
+e:"비타민 C는 철분의 흡수를 촉진하므로 오렌지 주스와 함께 복용하면 효과적임. 우유(칼슘), 녹차(탄닌), 칼슘 보충제는 철분 흡수를 방해함."},
+
+{q:"노화로 인한 수면의 변화로 옳은 것은?",
+o:["수면량이 증가한다","깊은 수면을 취한다","취침 중 각성 시간이 감소한다","낮 시간 동안 졸음이 감소한다","잠들기까지 시간이 오래 걸린다"],
+e:"노화에 따라 잠들기까지 시간(수면 잠복기)이 오래 걸리고, 수면 중 자주 깨며(각성 시간 증가), 깊은 수면(서파 수면)이 감소함."},
+
+{q:"위염 증상을 완화하는 데에 도움이 되는 방법은?",
+o:["하복부를 마사지한다","염장식품의 섭취를 격려한다","부드러운 유동식을 제공한다","음식을 뜨겁게 하여 제공한다","음식 섭취량을 늘리도록 한다"],
+e:"위염 시에는 위 점막에 자극을 줄이기 위해 부드러운 유동식이나 반유동식을 소량씩 자주 제공함. 염장식품, 뜨거운 음식은 위 점막을 자극하므로 피해야 함."},
+
+{q:"전립선비대증 대상자에게 나타날 수 있는 증상은?",
+o:["낮에는 소변이 잘 안나와 힘들어도 밤에는 잘 잔다","배뇨 후 시원하다","배뇨 횟수가 감소한다","소변 줄기가 굵어진다","소변이 마려울 때 참기 힘들다"],
+e:"전립선 비대증은 요도가 좁아져 긴박뇨(소변 참기 힘듦), 빈뇨, 야간뇨, 잔뇨감, 세뇨(소변 줄기 가늘어짐) 등의 증상이 나타남."},
+
+{q:"피부건조증 대상자를 돕는 방법으로 옳은 것은?",
+o:["꼭 끼는 옷을 입게 한다","뜨거운 물로 목욕하게 한다","목욕 후 물기를 두드려 말려 준다","겨울철에는 제습기를 사용하게 한다","샤워를 자주 하여 피부 각질을 없앤다"],
+e:"피부건조증 대상자는 목욕 후 수건으로 문지르지 말고 가볍게 두드려 말려야 함. 미지근한 물로 목욕하고, 겨울철에는 가습기를 사용하여 실내 습도를 유지해야 함."},
+
+{q:"노화와 관련된 호흡기계의 특성으로 옳은 것은?",
+o:["폐포의 탄력성이 증가하여 숨 쉬기가 편하다","콧속 점막에 습기가 증가하여 공기 흡입이 쉽다","기침반사가 증가하여 미세 물질을 걸러내기 쉽다","호흡근육이 약화되어 호흡 증가 시 피로해지기 쉽다","기관지 내 분비물이 감소하여 감염 발생 위험이 낮다"],
+e:"노화에 따라 호흡근육(횡격막, 늑간근)이 약화되어 활동 시 호흡이 증가하면 쉽게 피로해짐. 폐포 탄력성은 감소하고, 기침반사와 섬모운동이 감소하여 호흡기 감염 위험이 높아짐."},
+
+{q:"노화에 따른 호흡기계 변화로 옳은 것은?",
+o:["폐활량 증가","기침반사 증가","섬모운동 감소","코점막의 건조함 감소","기관지 내 분비물 감소"],
+e:"노화에 따라 기관지 내벽의 섬모운동이 감소하여 이물질·세균 등을 배출하는 능력이 떨어짐. 폐활량은 감소하고, 기침반사도 약해짐."},
+
+{q:"전립선비대증의 발생 요인으로 옳은 것은?",
+o:["요로 감염","체중 감소","소변 배설량 증가","규칙적 도뇨 시행","남성호르몬 불균형"],
+e:"전립선 비대증은 노화에 따른 남성호르몬(테스토스테론)의 불균형이 주요 발생 요인임."},
+
+{q:"우울증 발생 가능성이 높은 대상자의 상황은?",
+o:["가족과 함께 살고 있다","경로당 프로그램에 참여한다","낮에 햇빛을 쐬며 운동을 한다","최근 갑상샘기능저하증을 진단받았다","식욕과 체중이 변화 없이 유지되고 있다"],
+e:"갑상샘기능저하증은 우울증의 대표적인 신체적 원인 중 하나임. 갑상선호르몬 부족 시 무기력, 피로, 집중력 저하 등 우울증과 유사한 증상이 나타남."},
+
+{q:"당뇨병의 대표적인 증상으로 옳은 것은?",
+o:["갈증 감소","식사량 감소","소변 배출량 감소","말초 부종 증가","수분 섭취량 증가"],
+e:"당뇨병의 3대 증상(3다 증상)은 다음(多飲, 수분 섭취 증가), 다식(多食, 식사량 증가), 다뇨(多尿, 소변량 증가)임."},
+
+{q:"당뇨병 대상자를 돕는 방법으로 옳은 것은?",
+o:["발톱은 둥글게 자른다","간식으로 과일주스를 제공한다","식사하고 30분~1시간 뒤에 운동하게 한다","인슐린 주사약을 구강으로 복용하게 한다","활동량이 많은 날은 고혈당에 주의하게 한다"],
+e:"당뇨병 대상자는 식후 30분~1시간 후에 운동하는 것이 혈당 조절에 가장 효과적임. 발톱은 일자로 자르고, 인슐린은 반드시 주사로 투여해야 하며, 활동량이 많은 날은 저혈당에 주의해야 함."},
+
+{q:"노화에 따라 일반적으로 나타나는 호흡기계 변화는?",
+o:["폐활량 증가","섬모운동 증가","폐포의 탄력성 증가","기침반사 감소","기관지 내 분비물 감소"],
+e:"노화에 따라 기침반사가 감소하여 이물질이나 분비물을 효과적으로 배출하기 어려워짐. 폐활량, 섬모운동, 폐포 탄력성 모두 감소함."},
+
+// ===== 제6장 (21~44) =====
+{q:"다음 내용은 어떤 질환의 증상을 알아보기 위한 질문인가?\n(웃어 보세요, 말해 보세요, 양팔을 들어 보세요)",
+o:["치매","파킨슨병","섬망","뇌졸중","우울증"],
+e:"'웃어 보세요(안면 마비 확인), 말해 보세요(언어 장애 확인), 양팔을 들어 보세요(편측 마비 확인)'는 뇌졸중의 초기 증상을 빠르게 확인하기 위한 FAST 평가법에 해당함."},
+
+{q:"치매의 증상 중 '정신행동 증상'에 해당하는 것은?",
+o:["지남력 저하","실행증","망상과 환각","단기 기억력 감퇴","시공간 파악 능력 저하"],
+e:"지남력 저하, 실행증, 기억력 감퇴, 시공간 파악 능력 저하는 인지 증상에 해당함. 망상, 환각, 초조, 공격성, 배회, 수면 장애 등은 정신행동 증상(BPSD)에 해당함."},
+
+{q:"초기 단계의 경증 치매에서 나타나는 특징적인 증상은?",
+o:["환각","대소변 실금","단기기억력 저하","신체 활동 제한","의사소통 불가능"],
+e:"초기(경증) 치매에서 가장 먼저 나타나는 증상은 단기기억력 저하임. 환각, 대소변 실금, 신체 활동 제한, 의사소통 불가능은 주로 중기~말기에 나타남."},
+
+{q:"뇌졸중 대상자에게 나타나는 '구음장애(dysarthria)'와 '실어증(aphasia)'의 차이점으로 옳은 것은?",
+o:["구음장애는 언어 이해 능력이 손상된 것이고, 실어증은 발음이 부정확한 것이다","구음장애는 말하는 근육의 마비로 발음이 어려운 것이고, 실어증은 뇌의 언어 중추 손상으로 언어 이해나 표현이 어려운 것이다","두 증상은 동일하다","구음장애만 뇌졸중에서 나타난다","실어증은 치료가 불가능하다"],
+e:"구음장애는 입·혀·성대 등 말하는 근육의 마비로 발음이 부정확해지는 것이고, 실어증은 뇌의 언어 중추 손상으로 말을 이해하거나 표현하는 것 자체가 어려워지는 것임."},
+
+{q:"다음 중 치매의 '정신 행동 증상'이 아닌 것은?",
+o:["환각과 착각","망상과 의심","지남력 저하","초조 및 공격성","배회와 수면 장애"],
+e:"지남력 저하(시간·장소·사람을 인식하는 능력 저하)는 인지 증상에 해당함. 환각·착각, 망상·의심, 초조·공격성, 배회·수면 장애는 모두 정신행동 증상(BPSD)에 해당함."},
+
+{q:"대상자에게 소뇌 손상이 발생했을 때 나타나는 증상은?",
+o:["자세의 균형을 유지하지 못한다","감정을 조절하지 못한다","인지기능의 저하가 나타난다","한가지의 물체가 두 개로 보인다","말의 내용을 이해하지 못한다"],
+e:"소뇌는 몸의 균형과 자세 유지, 운동의 조화(협응)를 담당함. 소뇌 손상 시 자세의 균형을 유지하기 어렵고 걸음걸이가 비틀거림(운동실조)."},
+
+{q:"파킨슨 질환의 운동 증상 중, 단추를 끼우거나 글씨를 쓰는 등 행동이 점차 느려지는 증상은?",
+o:["진전(떨림)","서동","경직","자세 불안정","운동 실조증"],
+e:"서동(bradykinesia)이란 동작이 느려지는 것으로 파킨슨병의 핵심 운동 증상임. 글씨가 작아지고(소자증) 보폭이 줄어듦."},
+
+{q:"다음은 어떤 질환의 주요 증상인가?\n(근육 긴장, 뻣뻣한 느낌, 굽어진 자세, 기립성 저혈압, 변비)",
+o:["뇌졸중","치매","파킨슨 질환","퇴행성 관절염","골다공증"],
+e:"근육 경직(뻣뻣한 느낌), 굽어진 자세, 기립성 저혈압, 변비는 파킨슨 질환의 특징적인 증상임. 파킨슨병은 뇌의 도파민 신경세포 파괴로 발생함."},
+
+{q:"뇌의 혈액을 공급하는 혈관이 막히거나 터졌을 때 나타날 수 있는 증상은?",
+o:["묽은 혈변","전신성 수포","관절 부위의 통증","몸의 균형감각 상실","가래가 나오는 기침"],
+e:"뇌혈관이 막히거나(뇌경색) 터지면(뇌출혈) 뇌졸중이 발생함. 주요 증상으로 균형감각 상실, 편측 마비, 안면 마비, 언어 장애, 심한 두통 등이 나타남."},
+
+{q:"치매의 진행 단계 중, 거동이 불편해져 누워서만 지내게 되는 '와상 상태'가 시작되는 시기는?",
+o:["치매 전 단계","초기","중기","말기","말기 이후"],
+e:"치매 말기에는 신체 기능이 심하게 저하되어 거동이 불편해지고 누워서만 지내는 '와상 상태'가 시작됨. 대소변 실금, 연하 장애, 의사소통 불가능 등이 나타남."},
+
+{q:"치매 대상자가 운동화 끈을 매지 못하는 등 순서를 밟아야 하는 일에 어려움을 느끼는 증상은?",
+o:["지남력 저하","기억력 저하","시공간 파악 능력 저하","실행 기능 저하","판단력 저하"],
+e:"실행 기능 저하(실행증)란 운동 기능은 정상이지만, 목적이 있는 행동을 순서대로 계획하고 수행하는 능력이 떨어지는 것임."},
+
+{q:"다음에서 설명하는 신경계 질환은?\n(도파민 분비 장애, 동작 느려짐, 근육 경직, 안정 시 떨림)",
+o:["뇌졸중","뇌막염","파킨슨병","혈관성 치매","알츠하이머병"],
+e:"파킨슨병은 중뇌 흑질의 도파민 신경세포 소실로 발생함. 4대 운동 증상: 서동, 경직, 안정 시 진전, 자세 불안정."},
+
+{q:"'말해 보세요, 웃어 보세요, 걸어 보세요'로 확인 가능한 질환은?",
+o:["뇌졸중","파킨슨","치매","빈혈","심부전"],
+e:"뇌졸중의 초기 증상을 확인하는 방법임. 발음 이상(언어 장애), 한쪽 입꼬리 처짐(안면 마비), 한쪽으로 기움(편측 마비)을 확인함."},
+
+{q:"뇌졸중으로 좌측 뇌가 손상되었을 때 특징적으로 나타날 수 있는 증상은?",
+o:["좌측 반신 마비","실어증","전신 마비","안정 시 떨림","우측 뇌의 손상"],
+e:"좌측 뇌 손상 시 우측 반신 마비가 나타나고, 좌측 뇌에 언어 중추가 위치하므로 실어증이 특징적으로 나타남."},
+
+{q:"좌측 뇌가 손상된 대상자에게 나타날 수 있는 증상은?",
+o:["전신마비","언어 장애","좌측 편마비","양측 안구통증","좌측 얼굴 감각 이상"],
+e:"좌측 뇌 손상 시 우측 편마비와 함께 언어 장애(실어증)가 대표적으로 나타남. 대부분의 사람에서 언어 중추는 좌뇌에 위치함."},
+
+{q:"뇌에 혈액을 공급하는 혈관이 막히거나 터졌을 때 나타날 수 있는 증상은?",
+o:["얼굴 소양증","몸의 균형 상실","발작성 기침","붉은 혈변","양쪽 손발이 서서히 저려온다"],
+e:"뇌졸중 시 갑자기 몸의 균형을 잃고, 한쪽 팔다리가 마비됨. 뇌졸중의 특징은 '갑작스러운' 발생이며, 양쪽이 서서히 저려오는 것은 말초신경병증의 특징임."},
+
+{q:"파킨슨병 대상자에게 나타나는 비운동 증상을 모두 고른 것은?\nㄱ. 후각 저하  ㄴ. 변비  ㄷ. 우울증  ㄹ. 렘수면 행동장애  ㅁ. 안정 시 떨림",
+o:["ㄱ, ㄴ, ㄷ","ㄱ, ㄴ, ㄷ, ㄹ","ㄴ, ㄷ, ㅁ","ㄱ, ㄷ, ㅁ","ㄱ, ㄴ, ㄷ, ㄹ, ㅁ"],
+e:"비운동 증상: 후각 저하, 변비, 우울증, 렘수면 행동장애, 기립성 저혈압 등. '안정 시 떨림'은 대표적인 운동 증상이므로 비운동 증상에 해당하지 않음."},
+
+{q:"알츠하이머병 치매의 초기 증상으로 가장 대표적인 것은?",
+o:["보행 장애","시력 저하","환각 증상","최근 기억력 감퇴","손발 떨림"],
+e:"알츠하이머병의 가장 대표적인 초기 증상은 '최근 기억력 감퇴'임. 오래전 기억은 비교적 보존되지만 최근 기억부터 소실됨."},
+
+{q:"뇌졸중 대상자의 보행 보조 시 요양보호사의 위치로 옳은 것은?",
+o:["대상자의 건측(건강한 쪽)에 선다","대상자의 환측(마비된 쪽)에 선다","대상자의 뒤에 선다","대상자의 앞에 선다","어느 쪽이든 상관없다"],
+e:"뇌졸중 대상자의 보행 보조 시 요양보호사는 대상자의 환측(마비된 쪽)에 서야 함. 마비된 쪽으로 쓰러질 위험이 높기 때문임."},
+
+{q:"파킨슨병의 비운동 증상에 해당하지 않는 것은?",
+o:["우울증","변비","수면 장애","안정 시 떨림","기립성 저혈압"],
+e:"안정 시 떨림(진전)은 파킨슨병의 대표적인 '운동 증상'임. 우울증, 변비, 수면 장애, 기립성 저혈압은 모두 비운동 증상에 해당함."},
+
+{q:"다음에서 설명하는 신경계 질환은?\n• 도파민 분비 장애로 발생함\n• 동작이 느려지고 근육 경직, 안정 시 떨림이 나타남",
+o:["뇌졸중","뇌막염","파킨슨병","혈관성 치매","알츠하이머병"],
+e:"파킨슨병은 중뇌 흑질의 도파민 신경세포 소실로 도파민 분비가 감소하여 발생함. 핵심 운동 증상은 서동, 경직, 안정 시 진전임."},
+
+{q:"뇌졸중 대상자가 식사 시 접시의 한쪽에만 음식을 먹는 현상이 관찰될 때, 가장 의심되는 증상은?",
+o:["청력 저하","시력 저하","편측 무시(unilateral neglect)","연하장애","치아 결손"],
+e:"편측 무시는 주로 우측 뇌 손상 시 나타나며, 손상된 뇌의 반대쪽(주로 좌측) 공간을 인식하지 못하는 증상임."},
+
+{q:"치매의 원인 질환 중 가장 많은 비율을 차지하는 것은?",
+o:["혈관성 치매","알츠하이머병","루이체 치매","파킨슨병 치매","전측두엽 치매"],
+e:"알츠하이머병이 전체 치매 환자의 약 60~70%로 가장 흔함. 두 번째는 혈관성 치매(약 20~30%)임."},
+
+{q:"다음의 방법을 통해 예측할 수 있는 질환은?\n• 말을 해보게 하여 발음이 정확한지 확인한다.\n• 웃어 보게 하여 입 모양이 좌우 대칭인지 확인한다.",
+o:["빈혈","뇌졸중","신부전증","알츠하이머병","기립성 저혈압"],
+e:"발음 정확성과 얼굴 좌우 대칭 여부를 확인하는 것은 뇌졸중 초기 평가법임. 안면 마비와 언어 장애가 갑자기 나타나면 즉시 119에 신고해야 함."},
+
+// ===== 제7장 (45~60) =====
+{q:"고혈압 대상자의 비약물적 관리 방법으로 옳은 것은?",
+o:["나트륨(소금) 섭취를 하루 6g 이하로 제한한다","체중 관리는 혈압에 영향을 미치지 않는다","매일 30분 이상 규칙적인 유산소 운동은 혈압 상승에 기여한다","스트레스 관리는 혈압과 무관하다","금연은 혈압에 영향을 미치지 않는다"],
+e:"고혈압의 비약물적 관리에는 나트륨 섭취 제한(하루 6g 이하), 적정 체중 유지, 규칙적 유산소 운동, 스트레스 관리, 금연, 절주 등이 포함됨."},
+
+{q:"절주를 돕는 방법으로 옳은 것은?",
+o:["음주 일지를 작성하여 점검하게 한다","운동한 후에만 술을 마시게 한다","여러 종류의 술을 섞어 마시게 한다","집안에 잘 보이는 곳에 술을 전시하여 경각심을 가지게 한다","절주에 대한 결심을 주변 사람들에게 알리지 않게 한다"],
+e:"음주 일지를 작성하면 자신의 음주 패턴을 객관적으로 파악하고 절주 목표를 관리할 수 있음. 절주 결심을 주변에 알리면 실천에 도움이 됨."},
+
+{q:"항결핵제 복용 방법에 관한 설명으로 옳은 것은?",
+o:["2주 동안 복용한다","증상이 없으면 복용량을 줄인다","약물 복용이 끝날 때까지 격리한다","주기적으로 간기능 검사를 하면서 복용한다","항결핵제 중 한 가지 약물을 복용하는 것이 원칙이다"],
+e:"항결핵제는 간독성 등의 부작용이 있으므로 주기적으로 간기능 검사를 하면서 복용해야 함. 최소 6개월 이상 장기 복용이 필요하며, 2가지 이상 약물을 병용하는 것이 원칙임."},
+
+{q:"온열 질환 중 열사병과 열탈진을 비교한 설명으로 옳은 것은?",
+o:["열사병은 체온이 정상이고, 열탈진은 40℃ 이상의 고열이 나타난다","열사병은 피부가 차갑고 축축하며, 열탈진은 피부가 뜨겁고 건조하다","열사병은 40℃ 이상의 고열과 함께 뜨겁고 건조한 피부, 의식 장애가 나타나는 응급 상황이다","열탈진이 열사병보다 더 위험하다","열사병은 서늘한 곳에서 휴식만 취하면 된다"],
+e:"열사병은 체온이 40℃ 이상으로 올라가고, 피부가 뜨겁고 건조하며, 의식 장애가 나타나는 생명을 위협하는 응급 상황임. 열탈진은 상대적으로 덜 위험함."},
+
+{q:"대상자의 운동 관리 방법으로 옳은 것은?",
+o:["땀복을 입혀 운동 효과를 극대화한다","준비 운동을 생략하고 본 운동을 시작한다","개인의 운동 능력보다 높은 수준으로 계획한다","운동 효과를 높이기 위해 쉬지 않고 운동한다","안정 시 심박동수로 돌아올 때까지 마무리 운동을 한다"],
+e:"운동 후에는 안정 시 심박동수로 회복될 때까지 마무리 운동(정리운동)을 해야 함. 땀복은 열사병 위험을 높이고, 준비 운동은 부상 예방을 위해 반드시 필요함."},
+
+{q:"노인에게 안전한 운동 방법은?",
+o:["준비 운동은 3분 이내로 한다","방향을 빠르게 바꾸는 운동을 한다","저강도에서 고강도 순으로 운동한다","운동 시간을 서서히 줄인다","마무리 운동은 생략한다"],
+e:"노인의 안전한 운동은 저강도에서 시작하여 점차 고강도로 높여가는 것이 원칙임. 준비 운동은 최소 10~15분 이상 충분히 해야 함."},
+
+{q:"천식발작을 유발할 수 있는 요인은?",
+o:["폐포 팽창","기관지 확장","기침반사 증가","흥분이나 스트레스","가습된 따뜻한 공기"],
+e:"천식발작의 유발 요인에는 흥분이나 스트레스, 알레르겐(먼지, 꽃가루 등), 찬 공기, 운동, 감염, 흡연 등이 있음. 가습된 따뜻한 공기는 오히려 증상 완화에 도움됨."},
+
+{q:"옴에 감염된 대상자를 안전하게 돕는 방법으로 옳은 것은?",
+o:["감염 부위를 만져 보아 열감을 확인한다","오염된 속옷은 찬물로 세탁한 후 말린다","매일 아침 가려운 부위에 연고를 발라 준다","세탁이 어려운 침구는 다리미로 다린 후 사용한다","대상자와 접촉한 후 24시간 내에 예방접종을 받는다"],
+e:"세탁이 어려운 침구는 다리미의 높은 열로 다려서 옴진드기를 사멸시킬 수 있음. 오염된 세탁물은 60℃ 이상의 뜨거운 물로 세탁해야 하며, 옴에 대한 예방접종은 없음."},
+
+{q:"노인 약물 복용 방법으로 옳은 것은?",
+o:["위장 장애 시 용량 감소","삼키기 힘들면 쪼개서 복용","효과 없으면 임의 중단","건강기능식품 섭취 시 의사와 상의","유사 증상 타인 약 복용"],
+e:"건강기능식품도 약물과 상호작용을 일으킬 수 있으므로 반드시 의사와 상의해야 함. 장용 코팅정이나 서방정은 쪼개면 약효가 변할 수 있으며, 임의 중단이나 타인 약 복용은 위험함."},
+
+{q:"다음에서 설명하는 감염성 질환은?\n• 오염된 음식을 섭취하여 발생함\n• 구토, 메스꺼움, 오한, 복통, 설사 증상이 있음",
+o:["옴","결핵","독감","머릿니","노로바이러스 장염"],
+e:"오염된 음식 섭취 후 구토·설사·복통이 나타나는 것은 노로바이러스 장염의 전형적 증상임. 주로 오염된 식수나 어패류를 통해 감염됨."},
+
+{q:"노인이 운동을 꺼리게 되는 신체적인 변화는?",
+o:["근육 피로도 감소","폐활량 증가","자극에 대한 반응 감소","심장 근육의 수축력 향상","골밀도 증가"],
+e:"노화에 따라 자극에 대한 반응이 느려지고 반응 시간이 길어져 운동에 대한 자신감이 떨어지고 운동을 꺼리게 됨."},
+
+{q:"대상자가 두통이 있을 때마다 비처방약을 구입하여 복용할 때 대처방법은?",
+o:["장용 코팅제는 쪼개서 복용하게 한다","한 번에 많은 양을 구입해 두도록 한다","약 복용을 자제하고 통증을 최대한 참게 한다","비처방약도 복용하기 전에 의사와 상담하게 한다","증상이 비슷한 다른 대상자의 약을 복용하게 한다"],
+e:"비처방약이라도 다른 약물과의 상호작용, 부작용 등이 있을 수 있으므로 복용 전 반드시 의사나 약사와 상담해야 함."},
+
+{q:"약 복용 시 주의해야 하는 음식물에 대한 설명이 옳은 것은?",
+o:["자몽 주스는 와파린과 함께 먹으면 약효가 줄어든다","시금치는 고지혈증 약과 복용하면 부작용을 일으킬 수 있다","홍삼은 약과 같이 먹을 때 별다른 문제가 없다","두부는 혈압약과 함께 먹으면 부작용이 일어날 수 있다","커피, 유제품, 인삼 등은 약과 같이 먹을 때 예상치 않았던 문제가 생길 수 있다"],
+e:"커피(카페인), 유제품(칼슘), 인삼(면역 자극) 등은 특정 약물과 함께 복용 시 약효를 변화시키거나 부작용을 일으킬 수 있음."},
+
+{q:"65세 이상 노인에게 매년 1회 권장되는 예방접종은?",
+o:["파상풍","백일해","대상포진","폐렴구균","인플루엔자"],
+e:"인플루엔자(독감) 예방접종은 65세 이상 노인에게 매년 1회 접종을 권장함. 인플루엔자 바이러스는 매년 변이하므로 매년 새로운 백신으로 접종해야 함."},
+
+{q:"대상자의 영양 관리 방법으로 옳은 것은?",
+o:["음식이 뜨거울 때 간을 맞춘다","비타민 A 섭취로 칼슘 흡수를 돕는다","과일류 위주로 하루 세 끼 식사를 한다","육류, 생선, 유제품을 일주일에 한 번 섭취한다","식초, 후추, 파, 마늘과 같은 향신료를 사용한다"],
+e:"노인은 미각이 저하되어 짠맛을 덜 느끼므로 소금 대신 향신료를 사용하여 입맛을 돋우는 것이 좋음. 칼슘 흡수를 돕는 것은 비타민 D임."},
+
+{q:"대장암 예방을 고려한 식이요법으로 옳은 것은?",
+o:["통곡물로 만든 음식을 제공한다","고칼로리 음식을 제공한다","야식으로 가공식품을 제공한다","훈연된 동물성 식품을 제공한다","지방함량이 높은 음식을 제공한다"],
+e:"통곡물은 식이섬유가 풍부하여 장 운동을 촉진하고 발암물질의 장 통과 시간을 줄여 대장암 예방에 도움됨."},
+];
+
+/* 앱 로직 */
+var studentName='',answers=new Array(60).fill(0),timerInterval=null,remainTime=CONFIG.timeLimit,examSubmitted=false,reviewFilter='all';
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startExam(){var name=document.getElementById('studentName').value.trim();if(!name){alert('이름을 입력해 주세요.');return;}studentName=name;answers=new Array(60).fill(0);remainTime=CONFIG.timeLimit;examSubmitted=false;renderQuestions();renderAnswerMap();startTimer();showScreen('screenExam');}
+
+function renderQuestions(){var html='',secIdx=0;var mk=['①','②','③','④','⑤'];for(var i=0;i<Q.length;i++){if(secIdx<SECS.length&&i+1===SECS[secIdx].from){html+='<div class="section-header"><span class="sec-num">'+SECS[secIdx].from+'~'+SECS[secIdx].to+'번 ('+SECS[secIdx].count+'문항)</span>'+SECS[secIdx].name+'</div>';secIdx++;}var qText=Q[i].q.replace(/\n/g,'<br>');html+='<div class="q-card" id="q'+(i+1)+'"><div class="q-text"><span class="q-num">'+(i+1)+'</span>'+qText+'</div><ul class="options" id="opts'+(i+1)+'">';for(var j=0;j<Q[i].o.length;j++){html+='<li onclick="selectAnswer('+(i+1)+','+(j+1)+')" id="opt'+(i+1)+'_'+(j+1)+'"><span class="opt-marker">'+mk[j]+'</span>'+Q[i].o[j]+'</li>';}html+='</ul><div class="explanation" id="exp'+(i+1)+'"></div></div>';}document.getElementById('questionArea').innerHTML=html;}
+
+function renderAnswerMap(){var html='<div class="answer-num-grid">';for(var i=1;i<=60;i++){html+='<div class="answer-num-cell" id="amc'+i+'" onclick="scrollToQ('+i+')">'+i+'</div>';}html+='</div>';document.getElementById('answerMap').innerHTML=html;}
+
+function selectAnswer(qn,opt){if(examSubmitted)return;answers[qn-1]=opt;for(var j=1;j<=5;j++){var el=document.getElementById('opt'+qn+'_'+j);if(el){if(j===opt)el.classList.add('selected');else el.classList.remove('selected');}}var amc=document.getElementById('amc'+qn);if(amc)amc.classList.add('answered');updateProgress();}
+
+function updateProgress(){var answered=answers.filter(function(a){return a>0}).length;document.getElementById('examProgress').textContent=answered+' / 60';document.getElementById('progressFill').style.width=(answered/60*100)+'%';}
+
+function startTimer(){clearInterval(timerInterval);timerInterval=setInterval(function(){remainTime--;if(remainTime<=0){clearInterval(timerInterval);alert('⏰ 시간이 종료되었습니다. 자동 제출됩니다.');submitExam();return;}var m=Math.floor(remainTime/60),s=remainTime%60;var el=document.getElementById('examTimer');el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;if(remainTime<=300)el.classList.add('warning');},1000);}
+
+function scrollToQ(n){var el=document.getElementById('q'+n);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+
+function confirmSubmit(){var answered=answers.filter(function(a){return a>0}).length;var unanswered=60-answered;var msg='✅ 응시자: '+studentName+'\n📝 답안 작성: '+answered+'문항';if(unanswered>0)msg+='\n⚠️ 미응답: '+unanswered+'문항';document.getElementById('submitSummary').innerHTML=msg.replace(/\n/g,'<br>');showScreen('screenSubmitConfirm');}
+
+function goBackToExam(){showScreen('screenExam');}
+
+function submitExam(){clearInterval(timerInterval);examSubmitted=true;var now=new Date();var timeStr=now.getFullYear()+'.'+(now.getMonth()+1<10?'0':'')+(now.getMonth()+1)+'.'+(now.getDate()<10?'0':'')+now.getDate()+' '+(now.getHours()<10?'0':'')+now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();document.getElementById('submitTime').textContent=studentName+' | 제출: '+timeStr;showScreen('screenCode');}
+
+function checkCode(){var code=document.getElementById('resultCode').value.trim();if(code!==CONFIG.resultCode){alert('코드가 올바르지 않습니다.');return;}showResult();}
+
+function showResult(){var totalCorrect=0;var secResults=SECS.map(function(s){return{name:s.name,from:s.from,to:s.to,count:s.count,correct:0,wrong:0}});for(var i=0;i<60;i++){var isCorrect=answers[i]===ANS[i];if(isCorrect)totalCorrect++;for(var s=0;s<secResults.length;s++){if(i+1>=secResults[s].from&&i+1<=secResults[s].to){if(isCorrect)secResults[s].correct++;else secResults[s].wrong++;}}}var score=Math.round((totalCorrect/60)*100);var pass=score>=CONFIG.passScore;document.getElementById('resultName').textContent=studentName;var scoreEl=document.getElementById('resultScore');scoreEl.textContent=score+'점';scoreEl.className='result-score '+(pass?'pass':'fail');document.getElementById('resultBadge').innerHTML='<div class="result-badge '+(pass?'pass':'fail')+'">'+(pass?'🎉 합격':'📚 불합격')+'</div><br><span style="font-size:0.9em;">'+totalCorrect+' / 60 정답 ('+(60-totalCorrect)+'문항 오답)</span>';var tbody='';secResults.forEach(function(s){var rate=s.count>0?Math.round((s.correct/s.count)*100):0;tbody+='<tr><td style="text-align:left;font-size:0.8em;">'+s.name+'</td><td>'+s.count+'</td><td>'+s.correct+'</td><td>'+s.wrong+'</td><td>'+rate+'%</td></tr>';});tbody+='<tr class="total-row"><td style="text-align:left;">합계</td><td>60</td><td>'+totalCorrect+'</td><td>'+(60-totalCorrect)+'</td><td>'+score+'%</td></tr>';document.getElementById('scoreBody').innerHTML=tbody;showScreen('screenResult');}
+
+function showReview(){reviewFilter='all';renderReview();showScreen('screenReview');}
+
+function filterReview(type){reviewFilter=type;document.getElementById('filterAll').style.background=type==='all'?'var(--primary)':'';document.getElementById('filterAll').style.color=type==='all'?'#fff':'';document.getElementById('filterAll').style.borderColor=type==='all'?'var(--primary)':'';document.getElementById('filterWrong').style.background=type==='wrong'?'var(--primary)':'';document.getElementById('filterWrong').style.color=type==='wrong'?'#fff':'';document.getElementById('filterWrong').style.borderColor=type==='wrong'?'var(--primary)':'';renderReview();}
+
+function renderReview(){var mk=['①','②','③','④','⑤'];var html='',lastSecShown=-1,wrongCount=0;for(var i=0;i<Q.length;i++){var isCorrect=answers[i]===ANS[i];if(reviewFilter==='wrong'&&isCorrect)continue;if(!isCorrect)wrongCount++;for(var s=0;s<SECS.length;s++){if(i+1>=SECS[s].from&&i+1<=SECS[s].to&&lastSecShown!==s){html+='<div class="section-header"><span class="sec-num">'+SECS[s].from+'~'+SECS[s].to+'번</span>'+SECS[s].name+'</div>';lastSecShown=s;break;}}var qText=Q[i].q.replace(/\n/g,'<br>');html+='<div class="q-card" style="border-left-color:'+(isCorrect?'var(--correct-border)':'var(--wrong-border)')+'"><div class="q-text"><span class="q-num" style="background:'+(isCorrect?'var(--success)':'var(--accent)')+'">'+(i+1)+'</span>'+qText+'</div><ul class="options">';for(var j=0;j<Q[i].o.length;j++){var cls='';if(j+1===ANS[i])cls='correct';else if(j+1===answers[i]&&answers[i]!==ANS[i])cls='wrong';html+='<li class="'+cls+'"><span class="opt-marker">'+mk[j]+'</span>'+Q[i].o[j]+'</li>';}html+='</ul>';var expClass=isCorrect?'correct':'wrong';var myAns=answers[i]>0?mk[answers[i]-1]:'미응답';html+='<div class="explanation show '+expClass+'"><div class="exp-title">'+(isCorrect?'✅ 정답':'❌ 오답')+' | 정답: '+mk[ANS[i]-1]+' | 내 답: '+myAns+'</div>'+Q[i].e+'</div></div>';}document.getElementById('reviewSubtitle').textContent=reviewFilter==='wrong'?'오답 '+wrongCount+'문항':'전체 60문항';document.getElementById('reviewArea').innerHTML=html||'<div class="card" style="text-align:center;padding:40px;">🎉 오답이 없습니다!</div>';}
+
+function showAdmin(){showScreen('screenAdmin');}
+function adminAuth(){var pw=document.getElementById('adminPw').value.trim();if(pw!==CONFIG.adminPw){alert('비밀번호가 올바르지 않습니다.');return;}document.getElementById('adminLogin').style.display='none';document.getElementById('adminContent').style.display='block';renderAnswerGrid();}
+function renderAnswerGrid(){var mk=['①','②','③','④','⑤'];var html='';var grid=document.getElementById('answerGrid');grid.style.gridTemplateColumns='repeat(6, 1fr)';for(var row=0;row<20;row++){for(var col=0;col<3;col++){var idx=col*20+row;if(idx<60){html+='<div class="ag-cell ag-head">'+(idx+1)+'</div><div class="ag-cell">'+mk[ANS[idx]-1]+'</div>';}else{html+='<div class="ag-cell"></div><div class="ag-cell"></div>';}}}grid.innerHTML=html;}
+function copyKakao(){var text=document.getElementById('kakaoMsg').textContent;navigator.clipboard.writeText(text).then(function(){alert('📋 복사되었습니다.')}).catch(function(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('📋 복사되었습니다.');});}
+</script>
+</body>
+</html>
